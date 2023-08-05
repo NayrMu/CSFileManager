@@ -1,0 +1,15 @@
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\bin\Debug\net6.0\CSFileManager.exe
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\bin\Debug\net6.0\CSFileManager.deps.json
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\bin\Debug\net6.0\CSFileManager.runtimeconfig.json
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\bin\Debug\net6.0\CSFileManager.dll
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\bin\Debug\net6.0\CSFileManager.pdb
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.csproj.AssemblyReference.cache
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.AssemblyInfoInputs.cache
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.AssemblyInfo.cs
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.csproj.CoreCompileInputs.cache
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.dll
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\refint\CSFileManager.dll
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.pdb
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\CSFileManager.genruntimeconfig.cache
+C:\Users\rkmun\source\repos\CSFileManager\CSFileManager\obj\Debug\net6.0\ref\CSFileManager.dll
