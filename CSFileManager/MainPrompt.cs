@@ -19,7 +19,8 @@ public class MainPrompt {
     MethodInfo? noMod;
 
     Dictionary<string, Type> allCommands = new Dictionary<string, Type> {
-        {"cd", typeof(ChangeDirectory) }
+        {"cd", typeof(ChangeDirectory) },
+        {"view", typeof(ViewDirectory) },
     };
 
     public MainPrompt() {
@@ -43,7 +44,12 @@ public class MainPrompt {
                 workingCommandInstance = Activator.CreateInstance(workingCommand, sharedData);
                 MethodInfo? modifier = workingCommand.GetMethod(commandDic["arrMods"][0]);
                 if ( modifier != null ) {
-                    modifier.Invoke(workingCommandInstance,new object[] { commandDic["arrInputs"] });
+                    if ( modifier.GetParameters().Length > 0 ) {
+                        modifier.Invoke(workingCommandInstance, new object[] { commandDic["arrInputs"] });
+                    }
+                    else {
+                        modifier.Invoke(workingCommandInstance, null);
+                    }
                 }
                 else {
                     Console.WriteLine("Modifier not recognized.");

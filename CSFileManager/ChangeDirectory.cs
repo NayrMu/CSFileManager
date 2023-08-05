@@ -7,7 +7,7 @@ public class ChangeDirectory {
 		sharedData = sharedDataInstance;
 	}
 
-	public void noMod( List<string> destinationDir) {
+	public void dDir( List<string> destinationDir) {
 		sharedData.WorkingDir = string.Join("", destinationDir);
 	}
 
@@ -15,4 +15,13 @@ public class ChangeDirectory {
 		string parentDir = sharedData.WorkingDirInfo.Parent.FullName;
 		sharedData.WorkingDir = parentDir;
 	}
+
+	public void cu(List<string> destinationDir) {
+		sharedData.WorkingDir = @$"{sharedData.WorkingDir}\{string.Join("", destinationDir)}";
+    }
+
+	public void root() {
+		sharedData.WorkingDir = sharedData.homeDir;
+
+    }
 }
