@@ -7,8 +7,8 @@ public class ChangeDirectory {
 		sharedData = sharedDataInstance;
 	}
 
-	public void noMod(string destinationDir) {
-		sharedData.WorkingDir = destinationDir;
+	public void noMod( List<string> destinationDir) {
+		sharedData.WorkingDir = string.Join("", destinationDir);
 	}
 
 	public void upDir() {

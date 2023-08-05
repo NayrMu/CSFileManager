@@ -12,7 +12,7 @@ using SharedDataSpace;
 public class MainPrompt {
     
     SharedData sharedData;
-    List<string> commandArr;
+    Dictionary<string, List<string>> commandDic;
     Type? workingCommand;
     Type[] allTypes;
     object? workingCommandInstance;
@@ -37,36 +37,42 @@ public class MainPrompt {
             Console.Write($"{sharedData.WorkingDir}:: ");
             try {
                 sharedData.CommandInput = Console.ReadLine();
-                commandArr = CommandSplitter(sharedData.CommandInput);
-                workingCommand = allCommands[commandArr[0]];
-                noMod = workingCommand.GetMethod("noMod");
+                commandDic = CommandSplitter(sharedData.CommandInput);
+                List<string> arr1 = commandDic["arr1"];
+                workingCommand = allCommands[arr1[0]];
                 workingCommandInstance = Activator.CreateInstance(workingCommand, sharedData);
-                if ( false ) {
-                    MethodInfo? modifier = workingCommand.GetMethod(commandArr[1]);
-                    if ( modifier != null ) {
-                        modifier.Invoke(workingCommandInstance, null);
-                    }
-                    else {
-                        Console.WriteLine("Modifier not recognized.");
-                    }
+                MethodInfo? modifier = workingCommand.GetMethod(commandDic["arrMods"][0]);
+                if ( modifier != null ) {
+                    modifier.Invoke(workingCommandInstance,new object[] { commandDic["arrInputs"] });
                 }
                 else {
-                    noMod.Invoke(workingCommandInstance, new object[] { commandArr[1] });
+                    Console.WriteLine("Modifier not recognized.");
                 }
             }
             catch (ArgumentException ex) {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("An error occured: " + ex.Message);
                 continue;
             }
             
         }
     }
 
-    List<string> CommandSplitter(string commandStr) {
+    Dictionary<string, List<string>> CommandSplitter(string commandStr) {
 
-        List<string> returnArr = new List<string>();
-        returnArr = commandStr.Split(" ").ToList();
+        List<string> arr1;
+        arr1 = commandStr.Split(" ").ToList();
+        List<string> arr2;
+        arr2 = arr1[1].Split("|").ToList();
+        List<string> arrMods;
+        List<string> arrInputs;
+        arrMods = arr2[0].Split("-", StringSplitOptions.RemoveEmptyEntries).ToList();
+        arrInputs = arr2[1].Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+        Dictionary<string, List<string>> returnDic = new Dictionary<string, List<string>> {
+            { "arr1", arr1 },
+            { "arrMods", arrMods },
+            { "arrInputs", arrInputs }
+        };
 
-        return returnArr;
+        return returnDic;
     }
 }
