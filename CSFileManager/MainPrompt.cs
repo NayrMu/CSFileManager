@@ -3,10 +3,7 @@ using System.Reflection;
 using SharedDataSpace;
 
 /*
- * TODO
- * 1. Determine if user gave a mod or not
- * 2. Allow for multiple mods
- * 3. Flesh out commands and mods
+ * 
  */
 
 public class MainPrompt {
@@ -39,13 +36,13 @@ public class MainPrompt {
             try {
                 sharedData.CommandInput = Console.ReadLine();
                 commandDic = CommandSplitter(sharedData.CommandInput);
-                List<string> arr1 = commandDic["arr1"];
+                List<string> arr1 = commandDic["commandSplit"];
                 workingCommand = allCommands[arr1[0]];
                 workingCommandInstance = Activator.CreateInstance(workingCommand, sharedData);
-                MethodInfo? modifier = workingCommand.GetMethod(commandDic["arrMods"][0]);
+                MethodInfo? modifier = workingCommand.GetMethod(commandDic["modSplit"][0]);
                 if ( modifier != null ) {
                     if ( modifier.GetParameters().Length > 0 ) {
-                        modifier.Invoke(workingCommandInstance, new object[] { commandDic["arrInputs"] });
+                        modifier.Invoke(workingCommandInstance, new object[] { commandDic["inputSplit"] });
                     }
                     else {
                         modifier.Invoke(workingCommandInstance, null);
@@ -65,6 +62,30 @@ public class MainPrompt {
 
     Dictionary<string, List<string>> CommandSplitter(string commandStr) {
 
+
+        
+
+        List<string> commandSplit = commandStr.Split("|").ToList();
+        commandSplit[0] = commandSplit[0].Replace(" ", "");
+        List<string> inputSplit = commandSplit[1].Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+        commandSplit.RemoveAt(1);
+        commandSplit = string.Join("", commandSplit).Split("-").ToList();
+        List<string> modSplit = commandSplit.Skip(0).ToList();
+        modSplit.RemoveAt(0);
+        
+
+
+        
+        Dictionary<string, List<string>> returnDic = new Dictionary<string, List<string>> {
+            {"commandSplit", commandSplit}, 
+            {"inputSplit", inputSplit},
+            {"modSplit", modSplit },
+
+
+        };
+
+        
+        /*
         List<string> arr1;
         arr1 = commandStr.Split(" ").ToList();
         List<string> arr2;
@@ -78,6 +99,7 @@ public class MainPrompt {
             { "arrMods", arrMods },
             { "arrInputs", arrInputs }
         };
+        */
 
         return returnDic;
     }
