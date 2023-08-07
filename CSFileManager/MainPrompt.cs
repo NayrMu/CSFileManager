@@ -3,10 +3,7 @@ using System.Reflection;
 using SharedDataSpace;
 
 /*
- * TODO
- * 1. Determine if user gave a mod or not
- * 2. Allow for multiple mods
- * 3. Flesh out commands and mods
+ * 
  */
 
 public class MainPrompt {
@@ -21,6 +18,7 @@ public class MainPrompt {
     Dictionary<string, Type> allCommands = new Dictionary<string, Type> {
         {"cd", typeof(ChangeDirectory) },
         {"view", typeof(ViewDirectory) },
+        {"copy", typeof(Copy) },
     };
 
     public MainPrompt() {
@@ -39,13 +37,13 @@ public class MainPrompt {
             try {
                 sharedData.CommandInput = Console.ReadLine();
                 commandDic = CommandSplitter(sharedData.CommandInput);
-                List<string> arr1 = commandDic["arr1"];
+                List<string> arr1 = commandDic["commandSplit"];
                 workingCommand = allCommands[arr1[0]];
                 workingCommandInstance = Activator.CreateInstance(workingCommand, sharedData);
-                MethodInfo? modifier = workingCommand.GetMethod(commandDic["arrMods"][0]);
+                MethodInfo? modifier = workingCommand.GetMethod(commandDic["modSplit"][0]);
                 if ( modifier != null ) {
                     if ( modifier.GetParameters().Length > 0 ) {
-                        modifier.Invoke(workingCommandInstance, new object[] { commandDic["arrInputs"] });
+                        modifier.Invoke(workingCommandInstance, new object[] { commandDic["inputSplit"] });
                     }
                     else {
                         modifier.Invoke(workingCommandInstance, null);
@@ -56,7 +54,11 @@ public class MainPrompt {
                 }
             }
             catch (ArgumentException ex) {
-                Console.WriteLine("An error occured: " + ex.Message);
+                Console.WriteLine("A syntac error occured: " + ex.Message);
+                continue;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("An unexpected error occured: " + ex.Message);
                 continue;
             }
             
@@ -65,19 +67,32 @@ public class MainPrompt {
 
     Dictionary<string, List<string>> CommandSplitter(string commandStr) {
 
-        List<string> arr1;
-        arr1 = commandStr.Split(" ").ToList();
-        List<string> arr2;
-        arr2 = arr1[1].Split("|").ToList();
-        List<string> arrMods;
-        List<string> arrInputs;
-        arrMods = arr2[0].Split("-", StringSplitOptions.RemoveEmptyEntries).ToList();
-        arrInputs = arr2[1].Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+
+        commandStr = commandStr.Replace("..", $@"{sharedData.WorkingDir}\");
+
+        List<string> commandSplit = commandStr.Split("|").ToList();
+        commandSplit[0] = commandSplit[0].Replace(" ", "");
+        List<string> inputSplit = commandSplit[1].Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+        commandSplit.RemoveAt(1);
+        commandSplit = string.Join("", commandSplit).Split("-").ToList();
+        List<string> modSplit = commandSplit.Skip(0).ToList();
+        Console.WriteLine(modSplit[0]);
+        Console.WriteLine(modSplit[1]);
+        modSplit.RemoveAt(0);
+        Console.WriteLine(modSplit[0]);
+
+
+        
         Dictionary<string, List<string>> returnDic = new Dictionary<string, List<string>> {
-            { "arr1", arr1 },
-            { "arrMods", arrMods },
-            { "arrInputs", arrInputs }
+            {"commandSplit", commandSplit}, 
+            {"inputSplit", inputSplit},
+            {"modSplit", modSplit },
+
+
         };
+
+        
+        
 
         return returnDic;
     }
