@@ -18,6 +18,7 @@ public class MainPrompt {
     Dictionary<string, Type> allCommands = new Dictionary<string, Type> {
         {"cd", typeof(ChangeDirectory) },
         {"view", typeof(ViewDirectory) },
+        {"copy", typeof(Copy) },
     };
 
     public MainPrompt() {
@@ -53,7 +54,11 @@ public class MainPrompt {
                 }
             }
             catch (ArgumentException ex) {
-                Console.WriteLine("An error occured: " + ex.Message);
+                Console.WriteLine("A syntac error occured: " + ex.Message);
+                continue;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("An unexpected error occured: " + ex.Message);
                 continue;
             }
             
@@ -63,7 +68,7 @@ public class MainPrompt {
     Dictionary<string, List<string>> CommandSplitter(string commandStr) {
 
 
-        
+        commandStr = commandStr.Replace("..", $@"{sharedData.WorkingDir}\");
 
         List<string> commandSplit = commandStr.Split("|").ToList();
         commandSplit[0] = commandSplit[0].Replace(" ", "");
@@ -71,8 +76,10 @@ public class MainPrompt {
         commandSplit.RemoveAt(1);
         commandSplit = string.Join("", commandSplit).Split("-").ToList();
         List<string> modSplit = commandSplit.Skip(0).ToList();
+        Console.WriteLine(modSplit[0]);
+        Console.WriteLine(modSplit[1]);
         modSplit.RemoveAt(0);
-        
+        Console.WriteLine(modSplit[0]);
 
 
         
@@ -85,21 +92,7 @@ public class MainPrompt {
         };
 
         
-        /*
-        List<string> arr1;
-        arr1 = commandStr.Split(" ").ToList();
-        List<string> arr2;
-        arr2 = arr1[1].Split("|").ToList();
-        List<string> arrMods;
-        List<string> arrInputs;
-        arrMods = arr2[0].Split("-", StringSplitOptions.RemoveEmptyEntries).ToList();
-        arrInputs = arr2[1].Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
-        Dictionary<string, List<string>> returnDic = new Dictionary<string, List<string>> {
-            { "arr1", arr1 },
-            { "arrMods", arrMods },
-            { "arrInputs", arrInputs }
-        };
-        */
+        
 
         return returnDic;
     }
